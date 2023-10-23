@@ -1,5 +1,6 @@
 from fastapi import FastAPI, status
-from sqlalchemy import create_engine, text, insert, select
+from fastapi.responses import JSONResponse
+from sqlalchemy import create_engine, text, insert, select, update
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 import os
@@ -18,6 +19,9 @@ class TestModel(BaseModel):
 
 class UserAccountModel(BaseModel):
     name: str
+    fullname: str
+
+class UserAccountFullnameModel(BaseModel):
     fullname: str
 
 
@@ -53,15 +57,15 @@ async def add_data(model: TestModel):
     return {"message": f"{model.name} inserted"}
 
 
-@app.put("/{id}")
-async def put_data(id: int, item: TestModel):
-    sql = text("UPDATE test_table SET name = :name WHERE id = :id")
+@app.put("/{id_}")
+async def put_data(id_: int, item: TestModel):
+    sql = text("UPDATE test_table SET name = :name WHERE id = :id_")
 
     with Session(engine) as session:
-        session.execute(sql, {"name": item.name, "id": id})
+        session.execute(sql, {"name": item.name, "id": id_})
         session.commit()
 
-    return {"message": f"Register #{id} successfully updated!"}
+    return {"message": f"Register #{id_} successfully updated!"}
 
 
 @app.post("/user_account", status_code=status.HTTP_201_CREATED)
@@ -98,3 +102,22 @@ async def get_user_account(name: str):
         "fullname": user.fullname,
         "addresses": addresses
     }
+
+
+@app.patch("/user_account/{id_}")
+def update_user_account(id_: int, user_account: UserAccountFullnameModel):
+    get_user_sql = select(User).where(User.id == id_)
+
+    with Session(engine) as session:
+        user = session.execute(get_user_sql).first()
+
+    if not user:
+        return JSONResponse(status_code=400, content={"message": "Invalid data"})
+
+    update_sql = update(User).where(User.id == id_).values(fullname=user_account.fullname)
+
+    with Session(engine) as session:
+        session.execute(update_sql)
+        session.commit()
+
+    return {"message": "User updated"}
