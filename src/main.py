@@ -81,12 +81,12 @@ async def add_user_account(user_account: UserAccountModel):
 
 @app.post("/orm/user_account", status_code=status.HTTP_201_CREATED)
 async def add_user_account(user_account: UserAccountModel):
-    user = User(**dict(user_account))
-    session = Session(engine)
-    session.add(user)
-    session.commit()
+    with Session(engine) as session:
+        user = User(**dict(user_account))
+        session.add(user)
+        session.commit()
 
-    return {"message": f"User account #{user.id} created!"}
+        return {"message": f"User account #{user.id} created!"}
 
 
 @app.get("/user_account")
@@ -136,15 +136,17 @@ async def update_user_account(id_: int, user_account: UserAccountFullnameModel):
 @app.patch("/orm/user_account/{id_}")
 async def update_user_account(id_: int, user_account: UserAccountFullnameModel):
     message = {"message": "User updated"}
-    session = Session(engine)
-    user = session.get(User, id_)
+    with Session(engine) as session:
+        user = session.get(User, id_)
 
     if not user:
         return message
 
     user.fullname = user_account.fullname
-    session.add(user)
-    session.commit()
+
+    with Session(engine) as session:
+        session.add(user)
+        session.commit()
 
     return message
 
@@ -162,13 +164,11 @@ async def delete_user_account(id_: int):
 
 @app.delete("/orm/user_account/{id_}")
 async def delete_user_account(id_: int):
-    session = Session(engine)
-    user = session.get(User, id_)
+    with Session(engine) as session:
+        user = session.get(User, id_)
 
-    if not user:
-        return JSONResponse(status_code=204, content=None)
-
-    session.delete(user)
-    session.commit()
+        if user:
+            session.delete(user)
+            session.commit()
 
     return {"message": "User deleted"}
