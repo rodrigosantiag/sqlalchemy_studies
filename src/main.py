@@ -122,6 +122,7 @@ async def update_user_account(id_: int, user_account: UserAccountFullnameModel):
 
     return {"message": "User updated"}
 
+
 @app.delete("/user_account/{id_}")
 async def delete_user_account(id_: int):
     delete_sql = delete(User).where(User.id == id_)
