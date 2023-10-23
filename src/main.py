@@ -133,6 +133,22 @@ async def update_user_account(id_: int, user_account: UserAccountFullnameModel):
     return {"message": "User updated"}
 
 
+@app.patch("/orm/user_account/{id_}")
+async def update_user_account(id_: int, user_account: UserAccountFullnameModel):
+    message = {"message": "User updated"}
+    session = Session(engine)
+    user = session.get(User, id_)
+
+    if not user:
+        return message
+
+    user.fullname = user_account.fullname
+    session.add(user)
+    session.commit()
+
+    return message
+
+
 @app.delete("/user_account/{id_}")
 async def delete_user_account(id_: int):
     delete_sql = delete(User).where(User.id == id_)
@@ -140,5 +156,19 @@ async def delete_user_account(id_: int):
     with Session(engine) as session:
         session.execute(delete_sql)
         session.commit()
+
+    return {"message": "User deleted"}
+
+
+@app.delete("/orm/user_account/{id_}")
+async def delete_user_account(id_: int):
+    session = Session(engine)
+    user = session.get(User, id_)
+
+    if not user:
+        return JSONResponse(status_code=204, content=None)
+
+    session.delete(user)
+    session.commit()
 
     return {"message": "User deleted"}
