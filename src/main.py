@@ -79,6 +79,16 @@ async def add_user_account(user_account: UserAccountModel):
     return {"message": f"User account #{result.inserted_primary_key[0]} created!"}
 
 
+@app.post("/orm/user_account", status_code=status.HTTP_201_CREATED)
+async def add_user_account(user_account: UserAccountModel):
+    user = User(**dict(user_account))
+    session = Session(engine)
+    session.add(user)
+    session.commit()
+
+    return {"message": f"User account #{user.id} created!"}
+
+
 @app.get("/user_account")
 async def get_user_account(name: str):
     sql = select(User.id, User.name, User.fullname, User.addresses).where(User.name == name)
