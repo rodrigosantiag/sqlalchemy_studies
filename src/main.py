@@ -1,17 +1,20 @@
 from fastapi import FastAPI, status
-from sqlalchemy import create_engine, text, insert
+from sqlalchemy import create_engine, text, insert, select
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 import os
 
-from entities import User
+import logging
+from entities import User, Address
 
 app = FastAPI()
 engine = create_engine(os.getenv("DATABASE_URL"), echo=True)
 
+logger = logging.getLogger(__name__)
 
 class TestModel(BaseModel):
     name: str
+
 
 class UserAccountModel(BaseModel):
     name: str
@@ -70,3 +73,28 @@ async def add_user_account(user_account: UserAccountModel):
         conn.commit()
 
     return {"message": f"User account #{result.inserted_primary_key[0]} created!"}
+
+
+@app.get("/user_account")
+async def get_user_account(name: str):
+    sql = select(User.id, User.name, User.fullname, User.addresses).where(User.name == name)
+
+    with Session(engine) as session:
+        user = session.execute(sql).first()
+
+    if not user:
+        return {}
+
+    with Session(engine) as session:
+        user_addresses = session.execute(select(Address.email_address).where(Address.user_id == user.id))
+
+    addresses = []
+
+    for address in user_addresses:
+        addresses.append(address.email_address)
+
+    return {
+        "name": user.name,
+        "fullname": user.fullname,
+        "addresses": addresses
+    }

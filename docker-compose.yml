@@ -29,6 +29,7 @@ services:
       POSTGRES_DB: sqlalchemy_test
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db:/var/lib/postgresql/data
 
 volumes:
-  database:
+  db:
