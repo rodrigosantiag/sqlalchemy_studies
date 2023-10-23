@@ -1,6 +1,6 @@
 from fastapi import FastAPI, status
 from fastapi.responses import JSONResponse
-from sqlalchemy import create_engine, text, insert, select, update
+from sqlalchemy import create_engine, text, insert, select, update, delete
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 import os
@@ -105,7 +105,7 @@ async def get_user_account(name: str):
 
 
 @app.patch("/user_account/{id_}")
-def update_user_account(id_: int, user_account: UserAccountFullnameModel):
+async def update_user_account(id_: int, user_account: UserAccountFullnameModel):
     get_user_sql = select(User).where(User.id == id_)
 
     with Session(engine) as session:
@@ -121,3 +121,13 @@ def update_user_account(id_: int, user_account: UserAccountFullnameModel):
         session.commit()
 
     return {"message": "User updated"}
+
+@app.delete("/user_account/{id_}")
+async def delete_user_account(id_: int):
+    delete_sql = delete(User).where(User.id == id_)
+
+    with Session(engine) as session:
+        session.execute(delete_sql)
+        session.commit()
+
+    return {"message": "User deleted"}
