@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS user_account (
                               PRIMARY KEY (id)
 );
 
-CREATE TABLE address (
+CREATE TABLE IF NOT EXISTS address (
                          id SERIAL NOT NULL,
                          user_id INTEGER NOT NULL,
                          email_address VARCHAR NOT NULL,
