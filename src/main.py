@@ -13,6 +13,7 @@ engine = create_engine(os.getenv("DATABASE_URL"), echo=True)
 
 logger = logging.getLogger(__name__)
 
+
 class TestModel(BaseModel):
     name: str
 
@@ -20,6 +21,7 @@ class TestModel(BaseModel):
 class UserAccountModel(BaseModel):
     name: str
     fullname: str
+
 
 class UserAccountFullnameModel(BaseModel):
     fullname: str
@@ -33,10 +35,7 @@ async def get_data():
         rows = conn.execute(text("SELECT id, name FROM test_table"))
 
         for id, name in rows:
-            result.append({
-                "id": id,
-                "name": name
-            })
+            result.append({"id": id, "name": name})
 
     return result
 
@@ -44,10 +43,7 @@ async def get_data():
 @app.post("/", status_code=status.HTTP_201_CREATED)
 async def add_data(model: TestModel):
     with engine.begin() as conn:
-        conn.execute(
-            text("INSERT INTO test_table (name) VALUES (:name)"),
-            {"name": model.name}
-        )
+        conn.execute(text("INSERT INTO test_table (name) VALUES (:name)"), {"name": model.name})
 
         # conn.execute(
         #     text("INSERT INTO not_public.test_table_2 (name) VALUES (:name)"),
@@ -80,7 +76,7 @@ async def add_user_account(user_account: UserAccountModel):
 
 
 @app.post("/orm/user_account", status_code=status.HTTP_201_CREATED)
-async def add_user_account(user_account: UserAccountModel):
+async def add_user_account_orm(user_account: UserAccountModel):
     with Session(engine) as session:
         user = User(**dict(user_account))
         session.add(user)
@@ -100,18 +96,16 @@ async def get_user_account(name: str):
         return {}
 
     with Session(engine) as session:
-        user_addresses = session.execute(select(Address.email_address).where(Address.user_id == user.id))
+        user_addresses = session.execute(
+            select(Address.email_address).where(Address.user_id == user.id)
+        )
 
     addresses = []
 
     for address in user_addresses:
         addresses.append(address.email_address)
 
-    return {
-        "name": user.name,
-        "fullname": user.fullname,
-        "addresses": addresses
-    }
+    return {"name": user.name, "fullname": user.fullname, "addresses": addresses}
 
 
 @app.patch("/user_account/{id_}")
@@ -134,7 +128,7 @@ async def update_user_account(id_: int, user_account: UserAccountFullnameModel):
 
 
 @app.patch("/orm/user_account/{id_}")
-async def update_user_account(id_: int, user_account: UserAccountFullnameModel):
+async def update_user_account_orm(id_: int, user_account: UserAccountFullnameModel):
     message = {"message": "User updated"}
     with Session(engine) as session:
         user = session.get(User, id_)
@@ -163,7 +157,7 @@ async def delete_user_account(id_: int):
 
 
 @app.delete("/orm/user_account/{id_}")
-async def delete_user_account(id_: int):
+async def delete_user_account_orm(id_: int):
     with Session(engine) as session:
         user = session.get(User, id_)
 

@@ -4,8 +4,9 @@ WORKDIR /app
 
 COPY requirements.txt .
 COPY src .
+COPY Makefile .
 
-RUN pip install -r requirements.txt
+RUN make install
 
 EXPOSE 8000
 

@@ -1,0 +1,262 @@
+{
+	"info": {
+		"_postman_id": "bdf702a9-e0a2-46ee-a588-e56ad0dd8e2e",
+		"name": "SQL Alchemy studies",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7031663"
+	},
+	"item": [
+		{
+			"name": "ORM",
+			"item": [
+				{
+					"name": "Add data",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"test\", \"fullname\": \"Test da Silva\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/orm/user_account",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"orm",
+								"user_account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user account fulln ame",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"fullname\": \"Patrick the star\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/orm/user_account/5",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"orm",
+								"user_account",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user account",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/orm/user_account/19",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"orm",
+								"user_account",
+								"19"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Add data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\": \"Foo Bar da Silva 8\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000",
+					"host": [
+						"localhost"
+					],
+					"port": "8000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get data",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000",
+					"host": [
+						"localhost"
+					],
+					"port": "8000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update data",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\": \"Foo Bar da Silva 80\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/7",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add user account",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"fullname\": \"Patrick the star\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/user_account/5",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user_account",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user account",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000",
+					"host": [
+						"localhost"
+					],
+					"port": "8000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user account",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/user_account/13",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user_account",
+						"13"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
