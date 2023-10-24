@@ -38,7 +38,7 @@ make up
 
 #### Build and then run application
 ```shell
-make build_up
+make build-up
 ```
 
 #### Stop application

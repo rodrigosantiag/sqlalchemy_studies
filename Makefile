@@ -44,7 +44,7 @@ format:
 build:
 	@docker compose build
 
-build_up:
+build-up:
 	@docker compose up --wait --build
 
 up:
